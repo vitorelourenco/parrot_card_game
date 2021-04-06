@@ -1,3 +1,23 @@
-body{
-  background-color: red;
+:root {
+  --ff-roboto : 'Roboto', sans-serif;
+}
+
+body {
+  font-family: var(--ff-roboto);
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 42px;
+  letter-spacing: -0.004em;
+  color: #75b79e;
+  text-align: center;
+  margin-top: 40px;
+}
+
+@media (min-width: 1110px){
+  h1 {
+    font-size: 56px;
+    line-height: 63px;
+  }
 }
