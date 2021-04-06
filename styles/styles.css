@@ -33,20 +33,45 @@ h1 {
 .card {
   width: 117px;
   height: 146px;
+  margin: 17px;
+  position: relative;
+  cursor: pointer;
+}
+
+.card-content{
   background-color: #a7e9af;
   border-radius: 5px;
   border: 1px solid #99cea8;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 17px;
-  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: all 0.5s;
+  transform-style: preserve-3d;
 }
 
 .card img{
   width: 100px;
   height: 100px;
 }
+
+.back{
+  transform: rotateY(180deg);
+}
+
+.card:hover .back{
+  transform: rotateY(0deg);
+}
+
+.card:hover .front{
+  transform: rotateY(-180deg);
+}
+
 
 @media (min-width: 335px){
   h1 {
@@ -59,4 +84,8 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
   }
+}
+
+.persist {
+  cursor: auto;
 }
