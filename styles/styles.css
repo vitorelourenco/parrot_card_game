@@ -4,6 +4,8 @@
 
 body {
   font-family: var(--ff-roboto);
+  background-color: #EEF9BF;
+
 }
 
 h1 {
@@ -13,11 +15,45 @@ h1 {
   color: #75b79e;
   text-align: center;
   margin-top: 40px;
+  margin-bottom: 30px;
 }
 
-@media (min-width: 1110px){
+.cards-container {
+  max-width: 845px;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card {
+  width: 117px;
+  height: 146px;
+  background-color: #a7e9af;
+  border-radius: 5px;
+  border: 1px solid #99cea8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 17px;
+}
+
+.card img{
+  width: 100px;
+  height: 100px;
+}
+
+@media (min-width: 335px){
   h1 {
     font-size: 56px;
     line-height: 63px;
+  }
+
+  .cards-container{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
