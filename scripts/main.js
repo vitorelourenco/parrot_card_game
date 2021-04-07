@@ -37,10 +37,6 @@ const cardsObj = [
   }
 ];
 
-function wait1000() {
-  console.log('clicked');
-}
-
 function newGame(){
 
   //loops until a valid input is given
@@ -71,7 +67,7 @@ function newGame(){
   gameContainer.innerHTML = '';
   selectedList = [];
   flipCount = 0;
-  lastCheckTime = Date.now();
+  lastCheckTime = performance.now();
 
   //get the number of cards for the new instance of the game
   const nCards = readCards();
@@ -99,6 +95,7 @@ function newGame(){
   }
 
   allCards = gameContainer.querySelectorAll('.card');
+  startStopWatch();
 }
 
 function handleCardClick(callerClass, callerIndex){
@@ -115,8 +112,8 @@ function handleCardClick(callerClass, callerIndex){
     cardFront.classList.remove('front-flip');
   }
 
-  //force the play to wait if they get it wrong
-  if (Date.now()-lastCheckTime<1100) return;
+  //force the player to wait if they get it wrong
+  if (performance.now()-lastCheckTime<1100) return;
 
   const selected = allCards[callerIndex];
   //ignore it if the player clicks a card that has already been discovered
@@ -128,12 +125,12 @@ function handleCardClick(callerClass, callerIndex){
 
   selectedList.push({id: callerClass, index: callerIndex});
 
-  if (selectedList.length == 2){
-    lastCheckTime = Date.now();
+  if (selectedList.length === 2){
+    lastCheckTime = performance.now();
 
     const previousSelected = allCards[selectedList[0].index];
 
-    if (selectedList[0].id == selectedList[1].id){
+    if (selectedList[0].id === selectedList[1].id){
       selected.classList.add('permanent');
       previousSelected.classList.add('permanent');
       lastCheckTime = Date(0,0,0,0,0,0);
@@ -147,8 +144,9 @@ function handleCardClick(callerClass, callerIndex){
     selectedList = [];
   }
 
-  if (document.querySelectorAll('.permanent').length == document.querySelectorAll('.card').length){
-    alert(`Voce ganhou em ${flipCount} jogadas e em X segundos`)
+  if (document.querySelectorAll('.permanent').length === document.querySelectorAll('.card').length){
+    stopStopWatch();
+    alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
     const newGameAnswer = prompt('Quer Jogar de novo? digite sim');
     if (newGameAnswer === 'sim'){
       newGame();
@@ -156,9 +154,36 @@ function handleCardClick(callerClass, callerIndex){
   }
 }
 
+function timeKeeper(){
+  seconds++;
+  let s = seconds%60;
+  let m = (seconds - s)/60;
+  let sStr;
+  let mStr;
+  if (s<10) sStr = `0${s}`; else sStr = `${s}`;
+  if (m<10) mStr = `0${m}`; else mStr = `${m}`;
+  timeStamp.textContent = `${mStr}:${sStr}`;
+}
+
+function startStopWatch(){
+  seconds = 0;
+  timeStamp.textContent = "00:00";
+  stopwatch = setInterval(timeKeeper, 1000);
+}
+
+function stopStopWatch(){
+  clearInterval(stopwatch);
+}
+
 const gameContainer = document.querySelector('.cards-container');
+const timeStamp = document.querySelector('.time');
+
 let lastCheckTime;
 let allCards;
 let selectedList;
 let flipCount;
+
+let seconds;
+let stopwatch;
+
 newGame();

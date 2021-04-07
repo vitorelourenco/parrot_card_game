@@ -72,6 +72,17 @@ h1 {
   transform: rotateY(-180deg);
 }
 
+.stopwatch{
+  position: fixed;
+  right: 1ch;
+  top: 20px;
+  font-size: 14px;
+  width: 10ch;
+  text-align: end;
+  overflow: hidden;
+  color: grey;
+}
+
 
 @media (min-width: 335px){
   h1 {
