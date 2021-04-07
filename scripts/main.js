@@ -70,7 +70,7 @@ function newGame(){
   const nCards = readCards();
 
   //get n random cards out of the deck
-  const nCardsArr = arrShuffle(cardsObjArr).slice(0,nCards/2);
+  const nCardsArr = arrShuffle([...cardsObjArr]).slice(0,nCards/2);
 
   //duplicate each card and shuffle the cards
   const gameArr = arrShuffle(nCardsArr.concat(nCardsArr));
