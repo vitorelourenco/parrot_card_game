@@ -64,11 +64,11 @@ h1 {
   transform: rotateY(180deg);
 }
 
-.card:hover .back{
+.back-flip{
   transform: rotateY(0deg);
 }
 
-.card:hover .front{
+.front-flip{
   transform: rotateY(-180deg);
 }
 
@@ -85,7 +85,11 @@ h1 {
     justify-content: center;
   }
 }
-
+/* 
 .persist {
+  cursor: auto;
+} */
+
+.permanent {
   cursor: auto;
 }
