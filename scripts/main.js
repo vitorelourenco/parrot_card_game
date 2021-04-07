@@ -67,13 +67,13 @@ function newGame(){
   gameContainer.innerHTML = '';
   selectedList = [];
   flipCount = 0;
-  lastCheckTime = performance.now();
+  halt = false;
 
   //get the number of cards for the new instance of the game
   const nCards = readCards();
 
   //change this later to get n random cards
-  const nCardsArr = cardsObj.slice(0,nCards);
+  const nCardsArr = cardsObj.slice(0,nCards/2);
 
   //duplicate each card obj and store it in gameArr
   const gameArr = nCardsArr.concat(nCardsArr);
@@ -104,25 +104,24 @@ function handleCardClick(callerClass, callerIndex){
     const cardFront = card.querySelector('.front');
     cardBack.classList.add('back-flip');
     cardFront.classList.add('front-flip');
+    card.classList.add('persistent');
   }
   function flipDown(card){
     const cardBack = card.querySelector('.back');
     const cardFront = card.querySelector('.front');
     cardBack.classList.remove('back-flip');
     cardFront.classList.remove('front-flip');
+    card.classList.remove('persistent');
   }
 
   //force the player to wait if they get it wrong
-  if (performance.now()-lastCheckTime<1050) return;
+  if (halt === true) return;
 
   const selected = allCards[callerIndex];
   //ignore it if the player clicks a card that has already been discovered
-  if (selected.classList.contains('permanent')) return;
+  if (selected.classList.contains('persistent')) return;
+
   selectedList.push({id: callerClass, index: callerIndex});
-  if (selectedList.length === 2 && selectedList[0].index === callerIndex){
-    selectedList.pop();
-    return;
-  } 
 
   if (flipCount === 0) startStopWatch();
 
@@ -131,24 +130,24 @@ function handleCardClick(callerClass, callerIndex){
   flipUp(selected);
 
   if (selectedList.length === 2){
-    lastCheckTime = performance.now();
+    halt = true;
 
     const previousSelected = allCards[selectedList[0].index];
+    const cardId1 = selectedList[0].id;
+    const cardId2 = selectedList[1].id;
+    selectedList = [];
 
-    if (selectedList[0].id === selectedList[1].id){
-      selected.classList.add('permanent');
-      previousSelected.classList.add('permanent');
-      lastCheckTime = Date(0,0,0,0,0,0);
-      selectedList = [];
+    if (cardId1 === cardId2){
+      halt = false;
     } else {
-      selectedList = [];
       setTimeout(()=>{
         flipDown(selected);
         flipDown(previousSelected);
+        halt = false;
       }, 1000);
     }
 
-    if (document.querySelectorAll('.permanent').length === document.querySelectorAll('.card').length){
+    if (document.querySelectorAll('.persistent').length === document.querySelectorAll('.card').length){
       clearInterval(stopwatch);
       setTimeout(()=>{
         alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
@@ -180,12 +179,6 @@ function startStopWatch(){
 const gameContainer = document.querySelector('.cards-container');
 const timeStamp = document.querySelector('.time');
 
-let lastCheckTime;
-let allCards;
-let selectedList;
-let flipCount;
-
-let seconds;
-let stopwatch;
+let allCards, selectedList, flipCount, halt, seconds, stopwatch;
 
 newGame();
