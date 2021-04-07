@@ -32,11 +32,11 @@ const cardsObjArr = [
 
 function newGame(){
 
-  //loops until a valid input is given
+  //readCards() loops until a valid input is given
   //returns the integer number of cards
   function readCards(){
 
-    //checks to see if the input is valid (4<=n<=17)
+    //checkInput() checks to see if the input is valid (4<=n<=17)
     //returns true/false
     function checkInput(str){
       if (typeof(str) !== 'string') return false;
@@ -59,23 +59,16 @@ function newGame(){
     return array.sort(() => Math.random() - 0.5);
   }
 
-  //flush out anything from an older game
-  //and set fresh vars
+  //flush out anything from an older game and set fresh vars
   gameContainer.innerHTML = '';
   selectedList = [];
   flipCount = 0;
   halt = false;
 
-  //get the number of cards for the new instance of the game
   const nCards = readCards();
-
-  //get n random cards out of the deck
   const nCardsArr = arrShuffle([...cardsObjArr]).slice(0,nCards/2);
-
-  //duplicate each card and shuffle the cards
   const gameArr = arrShuffle(nCardsArr.concat(nCardsArr));
 
-  //builds the HTML for a new instance of the game
   for (let i=0; i<gameArr.length; i++){
     gameContainer.innerHTML += 
     `<div class="card" onclick="handleCardClick(this)">
@@ -88,7 +81,6 @@ function newGame(){
     </div>`;
   }
 
-  allCards = gameContainer.querySelectorAll('.card');
   timeStamp.textContent = "00:00";
 }
 
@@ -112,15 +104,13 @@ function handleCardClick(caller){
   if (halt === true) return;
 
   const selected = caller;
-  //ignore it if the player clicks a card that has already been discovered
+  //ignore the click if the player clicks a card that has is flipped up
   if (selected.classList.contains('persistent')) return;
 
   selectedList.push(caller);
 
   if (flipCount === 0) startStopWatch();
-
   flipCount++;
-
   flipUp(selected);
 
   if (selectedList.length === 2){
@@ -173,6 +163,6 @@ function startStopWatch(){
 const gameContainer = document.querySelector('.cards-container');
 const timeStamp = document.querySelector('.time');
 
-let allCards, selectedList, flipCount, halt, seconds, stopwatch;
+let selectedList, flipCount, halt, seconds, stopwatch;
 
 newGame();
