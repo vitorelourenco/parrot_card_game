@@ -95,7 +95,7 @@ function newGame(){
   }
 
   allCards = gameContainer.querySelectorAll('.card');
-  startStopWatch();
+  timeStamp.textContent = "00:00";
 }
 
 function handleCardClick(callerClass, callerIndex){
@@ -113,17 +113,22 @@ function handleCardClick(callerClass, callerIndex){
   }
 
   //force the player to wait if they get it wrong
-  if (performance.now()-lastCheckTime<1100) return;
+  if (performance.now()-lastCheckTime<1050) return;
 
   const selected = allCards[callerIndex];
   //ignore it if the player clicks a card that has already been discovered
   if (selected.classList.contains('permanent')) return;
+  selectedList.push({id: callerClass, index: callerIndex});
+  if (selectedList.length === 2 && selectedList[0].index === callerIndex){
+    selectedList.pop();
+    return;
+  } 
+
+  if (flipCount === 0) startStopWatch();
 
   flipCount++;
 
   flipUp(selected);
-
-  selectedList.push({id: callerClass, index: callerIndex});
 
   if (selectedList.length === 2){
     lastCheckTime = performance.now();
@@ -134,22 +139,24 @@ function handleCardClick(callerClass, callerIndex){
       selected.classList.add('permanent');
       previousSelected.classList.add('permanent');
       lastCheckTime = Date(0,0,0,0,0,0);
+      selectedList = [];
     } else {
+      selectedList = [];
       setTimeout(()=>{
         flipDown(selected);
         flipDown(previousSelected);
       }, 1000);
     }
 
-    selectedList = [];
-  }
-
-  if (document.querySelectorAll('.permanent').length === document.querySelectorAll('.card').length){
-    stopStopWatch();
-    alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
-    const newGameAnswer = prompt('Quer Jogar de novo? digite sim');
-    if (newGameAnswer === 'sim'){
-      newGame();
+    if (document.querySelectorAll('.permanent').length === document.querySelectorAll('.card').length){
+      stopStopWatch();
+      setTimeout(()=>{
+        alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
+        const newGameAnswer = prompt('Quer Jogar de novo? digite sim');
+        if (newGameAnswer === 'sim'){
+          newGame();
+        }
+      },501);
     }
   }
 }
@@ -167,7 +174,6 @@ function timeKeeper(){
 
 function startStopWatch(){
   seconds = 0;
-  timeStamp.textContent = "00:00";
   stopwatch = setInterval(timeKeeper, 1000);
 }
 

@@ -7,7 +7,6 @@ body {
   background-color: #EEF9BF;
   margin-left: 17px;
   margin-right: 17px;
-
 }
 
 h1 {
@@ -83,7 +82,6 @@ h1 {
   color: grey;
 }
 
-
 @media (min-width: 335px){
   h1 {
     font-size: 56px;
@@ -96,10 +94,6 @@ h1 {
     justify-content: center;
   }
 }
-/* 
-.persist {
-  cursor: auto;
-} */
 
 .permanent {
   cursor: auto;
