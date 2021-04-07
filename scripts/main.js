@@ -149,7 +149,7 @@ function handleCardClick(callerClass, callerIndex){
     }
 
     if (document.querySelectorAll('.permanent').length === document.querySelectorAll('.card').length){
-      stopStopWatch();
+      clearInterval(stopwatch);
       setTimeout(()=>{
         alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
         const newGameAnswer = prompt('Quer Jogar de novo? digite sim');
@@ -175,10 +175,6 @@ function timeKeeper(){
 function startStopWatch(){
   seconds = 0;
   stopwatch = setInterval(timeKeeper, 1000);
-}
-
-function stopStopWatch(){
-  clearInterval(stopwatch);
 }
 
 const gameContainer = document.querySelector('.cards-container');
