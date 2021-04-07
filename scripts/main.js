@@ -1,37 +1,30 @@
 //[{id:'n', src:'url'},...]
-const cardsObj = [
+const cardsObjArr = [
   {
-    id: 'img1',
     src: 'assets/images/bobrossparrot.gif',
     alt: 'bobross parrot'
   },
   {
-    id: 'img2',
     src: 'assets/images/explodyparrot.gif',
     alt: 'explody parrot'
   },
   {
-    id: 'img3',
     src: 'assets/images/fiestaparrot.gif',
     alt: 'fiesta parrot'
   },
   {
-    id: 'img4',
     src: 'assets/images/metalparrot.gif',
     alt: 'metal parrot'
   },
   {
-    id: 'img5',
     src: 'assets/images/revertitparrot.gif',
     alt: 'revertit parrot'
   },
   {
-    id: 'img6',
     src: 'assets/images/tripletsparrot.gif',
     alt: 'triplets parrot'
   },
   {
-    id: 'img7',
     src: 'assets/images/unicornparrot.gif',
     alt: 'unicorn parrot'
   }
@@ -62,6 +55,10 @@ function newGame(){
     return parseInt(strCards, 10);
   }
 
+  function arrShuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+  }
+
   //flush out anything from an older game
   //and set fresh vars
   gameContainer.innerHTML = '';
@@ -72,19 +69,16 @@ function newGame(){
   //get the number of cards for the new instance of the game
   const nCards = readCards();
 
-  //change this later to get n random cards
-  const nCardsArr = cardsObj.slice(0,nCards/2);
+  //get n random cards out of the deck
+  const nCardsArr = arrShuffle(cardsObjArr).slice(0,nCards/2);
 
-  //duplicate each card obj and store it in gameArr
-  const gameArr = nCardsArr.concat(nCardsArr);
-
-  //shuffle gameArr
-  function shuffling(){};
+  //duplicate each card and shuffle the cards
+  const gameArr = arrShuffle(nCardsArr.concat(nCardsArr));
 
   //builds the HTML for a new instance of the game
   for (let i=0; i<gameArr.length; i++){
     gameContainer.innerHTML += 
-    `<div class="card ${gameArr[i].id} index${i}" onclick="handleCardClick('.${gameArr[i].id}', ${i})">
+    `<div class="card" onclick="handleCardClick(this)">
       <div class="card-content front">
         <img src="assets/images/front.png" alt="parrot">
       </div>
@@ -98,7 +92,7 @@ function newGame(){
   timeStamp.textContent = "00:00";
 }
 
-function handleCardClick(callerClass, callerIndex){
+function handleCardClick(caller){
   function flipUp(card){
     const cardBack = card.querySelector('.back');
     const cardFront = card.querySelector('.front');
@@ -117,11 +111,11 @@ function handleCardClick(callerClass, callerIndex){
   //force the player to wait if they get it wrong
   if (halt === true) return;
 
-  const selected = allCards[callerIndex];
+  const selected = caller;
   //ignore it if the player clicks a card that has already been discovered
   if (selected.classList.contains('persistent')) return;
 
-  selectedList.push({id: callerClass, index: callerIndex});
+  selectedList.push(caller);
 
   if (flipCount === 0) startStopWatch();
 
@@ -132,12 +126,12 @@ function handleCardClick(callerClass, callerIndex){
   if (selectedList.length === 2){
     halt = true;
 
-    const previousSelected = allCards[selectedList[0].index];
-    const cardId1 = selectedList[0].id;
-    const cardId2 = selectedList[1].id;
+    const previousSelected = selectedList[0];
+    const cardSrc1 = selected.querySelector('.back img').src;
+    const cardSrc2 = previousSelected.querySelector('.back img').src;
     selectedList = [];
 
-    if (cardId1 === cardId2){
+    if (cardSrc1 === cardSrc2){
       halt = false;
     } else {
       setTimeout(()=>{
