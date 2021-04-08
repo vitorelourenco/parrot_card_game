@@ -43,8 +43,7 @@ function newGame(){
       if (str === '') return false;
       if (/\D/.test(str)) return false;
       const val = parseInt(str, 10);
-      if (val<4 || val>14) return false;
-      if (val%2 !== 0) return false;
+      if (val<4 || val>14 || val%2 !== 0) return false;
       return true;
     }
 
@@ -138,8 +137,7 @@ function timeKeeper(){
   seconds++;
   let s = seconds%60;
   let m = (seconds - s)/60;
-  let sStr;
-  let mStr;
+  let sStr, mStr;
   if (s<10) sStr = `0${s}`; else sStr = `${s}`;
   if (m<10) mStr = `0${m}`; else mStr = `${m}`;
   timeStamp.textContent = `${mStr}:${sStr}`;
