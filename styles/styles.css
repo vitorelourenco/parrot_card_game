@@ -63,14 +63,6 @@ h1 {
   transform: rotateY(180deg);
 }
 
-.back-flip{
-  transform: rotateY(0deg);
-}
-
-.front-flip{
-  transform: rotateY(-180deg);
-}
-
 .stopwatch{
   position: fixed;
   right: 1ch;
@@ -97,4 +89,12 @@ h1 {
 
 .persistent {
   cursor: auto;
+}
+
+.persistent .front{
+  transform: rotateY(-180deg);
+}
+
+.persistent .back{
+  transform: rotateY(0deg);
 }

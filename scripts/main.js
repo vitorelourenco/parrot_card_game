@@ -85,21 +85,6 @@ function newGame(){
 }
 
 function handleCardClick(caller){
-  function flipUp(card){
-    const cardBack = card.querySelector('.back');
-    const cardFront = card.querySelector('.front');
-    cardBack.classList.add('back-flip');
-    cardFront.classList.add('front-flip');
-    card.classList.add('persistent');
-  }
-  function flipDown(card){
-    const cardBack = card.querySelector('.back');
-    const cardFront = card.querySelector('.front');
-    cardBack.classList.remove('back-flip');
-    cardFront.classList.remove('front-flip');
-    card.classList.remove('persistent');
-  }
-
   //force the player to wait if they get it wrong
   if (halt === true) return;
 
@@ -111,7 +96,7 @@ function handleCardClick(caller){
 
   if (flipCount === 0) startStopWatch();
   flipCount++;
-  flipUp(selected);
+  selected.classList.add('persistent');
 
   if (selectedList.length === 2){
     halt = true;
@@ -125,8 +110,8 @@ function handleCardClick(caller){
       halt = false;
     } else {
       setTimeout(()=>{
-        flipDown(selected);
-        flipDown(previousSelected);
+        selected.classList.remove('persistent');
+        previousSelected.classList.remove('persistent');
         halt = false;
       }, 1000);
     }
