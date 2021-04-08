@@ -63,9 +63,12 @@ function newGame(){
   gameContainer.innerHTML = '';
   selectedList = [];
   flipCount = 0;
+  nFound = 0;
   halt = false;
+  nCards = readCards();
+  timeStamp.textContent = "00:00";
 
-  const nCards = readCards();
+  //randomizes nCards and creates the HTML for them
   const nCardsArr = arrShuffle([...cardsObjArr]).slice(0,nCards/2);
   const gameArr = arrShuffle(nCardsArr.concat(nCardsArr));
 
@@ -81,33 +84,35 @@ function newGame(){
     </div>`;
   }
 
-  timeStamp.textContent = "00:00";
 }
 
-function handleCardClick(caller){
-  //force the player to wait if they get it wrong
+function handleCardClick(selected){
+  //halt becomes false at the start of the game
+  //halt becomes true at the start of every 2*n valid click
+  //halt becomes false when matching succeeds
+  //halt becomes false after 1000ms after matching fails
   if (halt === true) return;
-
-  const selected = caller;
-  //ignore the click if the player clicks a card that has is flipped up
+  //ignore the click if the player clicks a card that is flipped up
   if (selected.classList.contains('persistent')) return;
-
-  selectedList.push(caller);
 
   if (flipCount === 0) startStopWatch();
   flipCount++;
+  
   selected.classList.add('persistent');
+  selectedList.push(selected);
 
   if (selectedList.length === 2){
     halt = true;
 
     const previousSelected = selectedList[0];
-    const cardSrc1 = selected.querySelector('.back img').src;
-    const cardSrc2 = previousSelected.querySelector('.back img').src;
     selectedList = [];
 
-    if (cardSrc1 === cardSrc2){
+    const cardSrc0 = selected.querySelector('.back img').src;
+    const cardSrc1 = previousSelected.querySelector('.back img').src;
+
+    if (cardSrc0 === cardSrc1){
       halt = false;
+      nFound += 2;
     } else {
       setTimeout(()=>{
         selected.classList.remove('persistent');
@@ -116,7 +121,7 @@ function handleCardClick(caller){
       }, 1000);
     }
 
-    if (document.querySelectorAll('.persistent').length === document.querySelectorAll('.card').length){
+    if (nFound === nCards){
       clearInterval(stopwatch);
       setTimeout(()=>{
         alert(`Voce ganhou em ${flipCount} jogadas e em ${seconds} segundos`)
@@ -124,7 +129,7 @@ function handleCardClick(caller){
         if (newGameAnswer === 'sim'){
           newGame();
         }
-      },501);
+      },500);
     }
   }
 }
@@ -148,6 +153,6 @@ function startStopWatch(){
 const gameContainer = document.querySelector('.cards-container');
 const timeStamp = document.querySelector('.time');
 
-let selectedList, flipCount, halt, seconds, stopwatch;
+let selectedList, flipCount, halt, seconds, stopwatch, nCards, nFound;
 
 newGame();
