@@ -80,18 +80,6 @@ h1 {
   color: grey;
 }
 
-@media (min-width: 335px){
-  h1 {
-    font-size: 56px;
-    line-height: 63px;
-  }
-
-  .cards-container{
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-}
 
 .persistent {
   cursor: auto;
@@ -103,4 +91,17 @@ h1 {
 
 .persistent .back{
   transform: rotateY(0deg);
+}
+
+@media (min-width: 470px){
+  h1 {
+    font-size: 56px;
+    line-height: 63px;
+  }
+
+  .cards-container{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

@@ -1,4 +1,4 @@
-//[{id:'n', src:'url'},...]
+//[{src:'url', alt:'str'},...]
 const cardsObjArr = [
   {
     src: 'assets/images/bobrossparrot.gif',
@@ -34,7 +34,7 @@ function newGame(){
 
   //readCards() loops until a valid input is given
   //returns the integer number of cards
-  function readCards(){
+  function readCards(min, max){
 
     //checkInput() checks to see if the input is valid (4<=n<=17)
     //returns true/false
@@ -43,7 +43,7 @@ function newGame(){
       if (str === '') return false;
       if (/\D/.test(str)) return false;
       const val = parseInt(str, 10);
-      if (val<4 || val>14 || val%2 !== 0) return false;
+      if (val<min || val>max || val%2 !== 0) return false;
       return true;
     }
 
@@ -64,12 +64,13 @@ function newGame(){
   flipCount = 0;
   nFound = 0;
   halt = false;
-  nCards = readCards();
+  nCards = readCards(4,14);
   timeStamp.textContent = "00:00";
 
-  //randomizes nCards and creates the HTML for them
-  const nCardsArr = arrShuffle([...cardsObjArr]).slice(0,nCards/2);
-  const gameArr = arrShuffle(nCardsArr.concat(nCardsArr));
+  //shuffle the cards before duplicating them and after duplicating them
+  //this way the player wont always get the same cards for the same input
+  const halfCardsArr = arrShuffle([...cardsObjArr]).slice(0,nCards/2);
+  const gameArr = arrShuffle(halfCardsArr.concat(halfCardsArr));
 
   for (let i=0; i<gameArr.length; i++){
     gameContainer.innerHTML += 
@@ -78,18 +79,17 @@ function newGame(){
         <img draggable="false" src="assets/images/front.png" alt="parrot">
       </div>
       <div class="card-content back">
-        <img draggable="false" src="${gameArr[i].src}" alt="${gameArr[i].alt}">
+        <img src="${gameArr[i].src}" alt="${gameArr[i].alt}">
       </div>
     </div>`;
   }
-
 }
 
 function handleCardClick(selected){
   //halt becomes false at the start of the game
   //halt becomes true at the start of every 2*n valid click
   //halt becomes false when matching succeeds
-  //halt becomes false after 1000ms after matching fails
+  //halt becomes false 1000ms after matching fails
   if (halt === true) return;
   //ignore the click if the player clicks a card that is flipped up
   if (selected.classList.contains('persistent')) return;
@@ -136,7 +136,7 @@ function handleCardClick(selected){
 function timeKeeper(){
   seconds++;
   let s = seconds%60;
-  let m = (seconds - s)/60;
+  let m = parseInt((seconds - s)/60, 10);
   let sStr, mStr;
   if (s<10) sStr = `0${s}`; else sStr = `${s}`;
   if (m<10) mStr = `0${m}`; else mStr = `${m}`;
