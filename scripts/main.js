@@ -75,10 +75,10 @@ function newGame(){
     gameContainer.innerHTML += 
     `<div class="card" onclick="handleCardClick(this)">
       <div class="card-content front">
-        <img src="assets/images/front.png" alt="parrot">
+        <img draggable="false" src="assets/images/front.png" alt="parrot">
       </div>
       <div class="card-content back">
-        <img src="${gameArr[i].src}" alt="${gameArr[i].alt}">
+        <img draggable="false" src="${gameArr[i].src}" alt="${gameArr[i].alt}">
       </div>
     </div>`;
   }
